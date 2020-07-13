@@ -1,0 +1,143 @@
+{% extends 'admin_panel/base.html.twig' %}
+
+{% block body %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Category "{{ category.name }}" detail</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Category "{{ category.name }}" Detail</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                        <i class="fas fa-minus"></i></button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                            title="Remove">
+                        <i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Promo products</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ category.productsCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Not published products</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ category.productsCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Total products</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ category.productsCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+
+                                {% if category.products.count > 0 %}
+                                    <h4>Category products</h4>
+
+                                    {% for product in category.products %}
+                                    <div class="user">
+                                        <div class="user-block">
+                                            <img class="img-circle img-bordered-lg"
+                                                 src="{{ asset('uploads/' ~ product.image) }}"
+                                                 alt="user image">
+                                            <span class="username">
+                                            <a href="#">{{ product.title }}</a>
+                                                {% if product.promotion %}
+                                                    <span class="badge badge-danger"> promo </span>
+                                                {% endif %}
+                                         </span>
+                                            <span class="description">
+
+                                            {% if product.category.parent %}
+                                                {{ product.category.parent.name }} /
+                                            {% endif %}
+                                                {{ product.category }}
+
+                                                <div class="text-info"><del>{{ product.price|number_format(2) }} BGN</del></div>
+                                                {% if product.promotion %}
+                                                    <div class="text-danger">{{ product.promoPrice|number_format(2) }} BGN (-{{ product.promotion.percentage }}%)</div>
+                                                {% endif %}
+                                        </span>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% else %}
+                                <h3 class="mes">This category does not have products yet.</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                        <h3 class="text-primary">{{ category.name }}</h3>
+                        <div class="text-muted">
+                            <p class="text-sm">Created by
+                                <b class="d-block">{{ category.author.firstName }} {{ category.author.lastName }}</b>
+                            </p>
+                            <p class="text-sm">Created on
+                                <b class="d-block">{{ category.createdOn|date("F jS \\a\\t g:ia") }}</b>
+                            </p>
+                        </div>
+
+                        <h5 class="mt-5 text-muted">
+
+                            {% if category.parent == false %}
+                            {{ category.name }} is parent category!
+
+                        </h5> <br/>
+
+                        {% for subcategory in category.children %}
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="{{ path('admin_categories_view', {'id': subcategory.id }) }}"
+                                       class="btn-link text-info">{{ subcategory.parent.name }}
+                                        / {{ subcategory.name }} </a>
+                                </li>
+                            </ul>
+                        {% endfor %}
+
+                        {% else %}
+                        <h5 class="text-info">Category {{ category.name }} is subcategory of {{ category.parent.name }}</h5>
+                        {% endif %}
+
+                        <div class="text-center mt-5 mb-3">
+                            <a href="{{ path('admin_categories_edit', { 'id': category.id }) }}" class="btn btn-sm btn-primary">Edit category</a>
+                            <a href="{{ path('admin_categories_delete', { 'id': category.id }) }}" class="btn btn-sm btn-danger">Delete category</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+{% endblock %}

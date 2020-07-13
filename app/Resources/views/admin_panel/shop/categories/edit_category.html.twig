@@ -1,0 +1,43 @@
+{% extends 'admin_panel/base.html.twig' %}
+
+{% block body %}
+    <section class="content mt-3">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+
+
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Edit Category</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form action="{{ path('admin_categories_edit', {'id': category.id}) }}" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Category name</label>
+                                    {{ form_widget(form.name, {'attr': {'value': category.name }}) }}
+                                </div>
+                                {% if category.children.count < 1 %}
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Subcategory of ({{ category.parent.name }})</label>
+                                    {{ form_widget(form.parent) }}
+                                </div>
+                                {% else %}
+                                <h5 class="text-info">You can't set parent category while category has subcategories.</h5>
+                                {% endif %}
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                {{ form_widget(form.save, {'label': 'Edit Category'}) }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

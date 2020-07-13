@@ -1,0 +1,95 @@
+{% extends 'admin_panel/base.html.twig' %}
+
+{% block body %}
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card card-solid">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="col-12">
+                            <img src="{{ asset('uploads/' ~ product.image ) }}" class="product-image img-fluid w-50"
+                                 alt="Product Image">
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <h3 class="my-3">{{ product.title }}
+                            {% if product.promotion %}
+                                <span class="badge badge-danger">promo</span>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <a href="{{ path('admin_product_promotion_delete', {'id': product.id}) }}">
+                                        <button type="button" class="btn btn-outline-info">Stop promotion</button>
+                                    </a>
+                                    <a href="{{ path('admin_products_edit_promotion', {'id': product.id}) }}">
+                                        <button type="button" class="btn btn-outline-info">Edit promotion</button>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <a href="{{ path('admin_product_fast_promotion', {'id': product.id }) }}">
+                                        <button type="button" class="btn btn-outline-info">Fast promotion <span
+                                                    class="font-weight-bold text-danger">(20%)</span></button>
+                                    </a>
+                                    <a href="{{ path('admin_products_set_promotion', {'id': product.id}) }}">
+                                        <button type="button" class="btn btn-outline-info">Custom promotion</button>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </h3>
+                        <p>{{ product.description }}</p>
+                        <hr>
+
+                        <div class="bg-gray py-2 px-3 mt-4">
+                            <h2 class="mb-0">
+                                {% if product.promotion %}
+                                    <del>Price: {{ product.price|number_format(2) }} BGN</del> <br/>
+                                    <span class="text-danger font-weight-bold"> Price: {{ product.finalPrice|number_format(2) }} BGN (-{{ product.promotion.percentage }}<span
+                                                class="small">%</span>)</span>
+                                {% else %}
+                                    Price: {{ product.finalPrice|number_format(2) }} BGN
+                                {% endif %}
+                            </h2>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="btn btn-primary btn-lg btn-flat disabled">
+                                <i class="fas fa-cart-plus fa-lg mr-2"></i>
+                                Add to Cart
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+
+                            <a href="#" class="btn btn-outline-success btn-sm">Edit</a>
+                            <a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <nav class="w-100">
+                        <div class="nav nav-tabs" id="product-tab" role="tablist">
+                            <a class="nav-item nav-link" id="product-desc-tab" data-toggle="tab" href="#product-desc"
+                               role="tab" aria-controls="product-desc" aria-selected="false">Description</a>
+                            <a class="nav-item nav-link active" id="product-rating-tab" data-toggle="tab"
+                               href="#product-rating" role="tab" aria-controls="product-rating" aria-selected="true">Features</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content p-3" id="nav-tabContent">
+                        <div class="tab-pane fade" id="product-desc" role="tabpanel" aria-labelledby="product-desc-tab">
+                            {{ product.description }}
+                        </div>
+                        <div class="tab-pane fade active show" id="product-rating" role="tabpanel"
+                             aria-labelledby="product-rating-tab"> TODO
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+{% endblock %}
