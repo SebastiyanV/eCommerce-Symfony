@@ -18,23 +18,19 @@
                         <h3 class="my-3">{{ product.title }}
                             {% if product.promotion %}
                                 <span class="badge badge-danger">promo</span>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                    <a href="{{ path('admin_product_promotion_delete', {'id': product.id}) }}">
-                                        <button type="button" class="btn btn-outline-info">Stop promotion</button>
-                                    </a>
-                                    <a href="{{ path('admin_products_edit_promotion', {'id': product.id}) }}">
-                                        <button type="button" class="btn btn-outline-info">Edit promotion</button>
-                                    </a>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{{ path('admin_product_promotion_delete', {'id': product.id}) }}"
+                                       type="button" class="btn btn-outline-info btn-sm">Stop promotion</a>
+                                    <a href="{{ path('admin_products_edit_promotion', {'id': product.id}) }}"
+                                       type="button" class="btn btn-outline-info btn-sm">Edit promotion</a>
                                 </div>
                             {% else %}
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                    <a href="{{ path('admin_product_fast_promotion', {'id': product.id }) }}">
-                                        <button type="button" class="btn btn-outline-info">Fast promotion <span
-                                                    class="font-weight-bold text-danger">(20%)</span></button>
-                                    </a>
-                                    <a href="{{ path('admin_products_set_promotion', {'id': product.id}) }}">
-                                        <button type="button" class="btn btn-outline-info">Custom promotion</button>
-                                    </a>
+                                    <a href="{{ path('admin_product_fast_promotion', {'id': product.id }) }}"
+                                       type="button" class="btn btn-outline-info">Fast promotion <span
+                                                class="font-weight-bold text-danger">(20%)</span></a>
+                                    <a href="{{ path('admin_products_set_promotion', {'id': product.id}) }}"
+                                       type="button" class="btn btn-outline-info">Custom promotion</a>
                                 </div>
                             {% endif %}
                         </h3>
@@ -53,15 +49,7 @@
                             </h2>
                         </div>
 
-                        <div class="mt-4">
-                            <div class="btn btn-primary btn-lg btn-flat disabled">
-                                <i class="fas fa-cart-plus fa-lg mr-2"></i>
-                                Add to Cart
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-
+                        <div class="btn-group mt-4">
                             <a href="#" class="btn btn-outline-success btn-sm">Edit</a>
                             <a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
                         </div>
