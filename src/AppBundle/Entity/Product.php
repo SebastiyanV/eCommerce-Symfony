@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
@@ -83,7 +82,6 @@ class Product
 
     /**
      * Product constructor.
-     * @param bool $isPublic
      */
     public function __construct()
     {
@@ -203,6 +201,7 @@ class Product
                 return $this->getPrice() * $order->getQuantity();
             }
         }
+        return 0;
     }
 
     /**
@@ -215,6 +214,7 @@ class Product
                 return $this->getPromoPrice() * $order->getQuantity();
             }
         }
+        return 0;
     }
 
     /**
