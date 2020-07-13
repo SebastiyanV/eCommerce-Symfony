@@ -81,6 +81,12 @@ class Product
     private $promotion;
 
     /**
+     * @var Specification
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Specification", mappedBy="products")
+     */
+    private $specifications;
+
+    /**
      * Product constructor.
      */
     public function __construct()
@@ -183,8 +189,9 @@ class Product
     /**
      * @return float|int
      */
-    public function getFinalPrice() {
-        if($this->getPromotion()) {
+    public function getFinalPrice()
+    {
+        if ($this->getPromotion()) {
             return $this->price - ($this->price * ($this->promotion->getPercentage() / 100));
         } else {
             return $this->getPrice();
@@ -194,26 +201,30 @@ class Product
     /**
      * @return float|int
      */
-    public function getQuantityPrice() {
+    public function getQuantityPrice()
+    {
         /** @var Orders $order */
         foreach ($this->order as $order) {
-            if($order->getProduct()->getId() == $this->getId()) {
+            if ($order->getProduct()->getId() == $this->getId()) {
                 return $this->getPrice() * $order->getQuantity();
             }
         }
+
         return 0;
     }
 
     /**
      * @return float|int
      */
-    public function getQuantityPromoPrice() {
+    public function getQuantityPromoPrice()
+    {
         /** @var Orders $order */
         foreach ($this->order as $order) {
-            if($order->getProduct()->getId() == $this->getId()) {
+            if ($order->getProduct()->getId() == $this->getId()) {
                 return $this->getPromoPrice() * $order->getQuantity();
             }
         }
+
         return 0;
     }
 
@@ -329,6 +340,27 @@ class Product
     public function setPromotion(Promotion $promotion): void
     {
         $this->promotion = $promotion;
+    }
+
+    /**
+     * @return array|null|object
+     */
+    public function getSpecifications(): ?array
+    {
+        $specifications = [];
+        foreach ($this->specifications as $specification) {
+            $specifications[] = $specification;
+        }
+
+        return $specifications;
+    }
+
+    /**
+     * @param Specification $specifications
+     */
+    public function setSpecifications(Specification $specifications): void
+    {
+        $this->specifications = $specifications;
     }
 
 
