@@ -54,6 +54,7 @@ class SpecificationController extends Controller
      * @Route("/admin/products/{id}/specifications/create", methods={"POST"})
      * @param Request $request
      * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function adminSpecificationCreateProcess(Request $request, int $id)
     {
@@ -69,5 +70,41 @@ class SpecificationController extends Controller
         $this->addFlash('success', 'Successfully added a specification to this product!');
 
         return $this->redirectToRoute('admin_products_specifications_create', ['id' => $product->getId()]);
+    }
+
+    /**
+     * @Route("/admin/products/{productId}/specification/edit/{specificationId}", name="admin_products_specification_edit", methods={"GET"})
+     * @param int $productId
+     * @param int $specificationId
+     * @return Response
+     */
+    public function adminSpecificationEdit(int $productId, int $specificationId)
+    {
+        return $this->render(
+            'admin_panel/shop/products/specifications/edit_specification.html.twig',
+            [
+                'product' => $this->productService->getOneById($productId),
+                'specification' => $this->specificationService->getOneById($specificationId),
+                'form' => $this->createForm(SpecificationType::class)->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/admin/products/{productId}/specification/edit/{specificationId}", methods={"POST"})
+     * @param int $productId
+     * @param int $specificationId
+     * @param Request $request
+     */
+    public function adminSpecificationEditProcess(int $productId, int $specificationId, Request $request)
+    {
+        $specification = $this->specificationService->getOneById($specificationId);
+        $form = $this->createForm(SpecificationType::class, $specification);
+        $form->handleRequest($request);
+
+        $this->specificationService->edit($specification);
+        $this->addFlash('success', 'Specification updated successfully!');
+
+        return $this->redirectToRoute('admin_products_specifications_create', ['id' => $productId]);
     }
 }
