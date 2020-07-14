@@ -103,7 +103,7 @@
     <!-- /.content -->
 
     <script>
-        document.promoForm.total.value = {{ product.finalPrice }};
+        document.promoForm.total.value = {{ product.finalPrice }} + " BGN";
 
         function Calc(className) {
             const percentage = document.getElementsByClassName(className)[0].value;

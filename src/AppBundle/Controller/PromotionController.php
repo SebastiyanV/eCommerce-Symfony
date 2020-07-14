@@ -125,7 +125,9 @@ class PromotionController extends Controller
         if ($promotion->getPercentage() >= 0 && $promotion->getPercentage() <= 100) {
             $this->promotionService->insert($promotion);
 
-            return $this->redirectToRoute('admin_products_view_by_id', ['id' => $product->getId()]);
+            $this->addFlash('success', 'You successfully set promotion ot this article!');
+
+            return $this->redirectToRoute('admin_products_set_promotion', ['id' => $product->getId()]);
         }
 
         $this->addFlash('danger', 'Invalid promotion!');
@@ -170,7 +172,9 @@ class PromotionController extends Controller
         if ($promotion->getPercentage() >= 0 && $promotion->getPercentage() <= 100) {
             $this->promotionService->update($promotion);
 
-            return $this->redirectToRoute('admin_products_view_by_id', ['id' => $product->getId()]);
+            $this->addFlash('success', 'You successfully set promotion ot this article!');
+
+            return $this->redirectToRoute('admin_products_edit_promotion', ['id' => $product->getId()]);
         }
 
         $this->addFlash('danger', 'Invalid promotion!');
