@@ -2,8 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Specification;
+use AppBundle\Form\SpecificationType;
+use AppBundle\Service\Article\ProductServiceInterface;
 use AppBundle\Service\Specification\SpecificationServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,26 +16,58 @@ class SpecificationController extends Controller
     /** @var SpecificationServiceInterface $specificationService */
     private $specificationService;
 
+    /** @var ProductServiceInterface $productService */
+    private $productService;
+
     /**
      * SpecificationController constructor.
      * @param SpecificationServiceInterface $specificationService
+     * @param ProductServiceInterface $productService
      */
-    public function __construct(SpecificationServiceInterface $specificationService)
-    {
+    public function __construct(
+        SpecificationServiceInterface $specificationService,
+        ProductServiceInterface $productService
+    ) {
         $this->specificationService = $specificationService;
+        $this->productService = $productService;
     }
 
     /**
-     * @Route("/test", name="test")
+     * @Route("/admin/products/{id}/specifications/create", name="admin_products_specifications_create", methods={"GET"})
+     * @param int $id
      * @return Response
      */
-    public function test()
+    public function adminSpecificationCreate(int $id)
     {
+        $product = $this->productService->getOneById($id);
+
         return $this->render(
-            'admin_panel/shop/products/specifications/view_all_specifications.html.twig',
+            'admin_panel/shop/products/specifications/create_specification.html.twig',
             [
-                'specifications' => $this->specificationService->getAll(),
+                'product' => $product,
+                'form' => $this->createForm(SpecificationType::class)->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("/admin/products/{id}/specifications/create", methods={"POST"})
+     * @param Request $request
+     * @param int $id
+     */
+    public function adminSpecificationCreateProcess(Request $request, int $id)
+    {
+        $specification = new Specification();
+        $product = $this->productService->getOneById($id);
+
+        $specification->setProducts($product);
+
+        $form = $this->createForm(SpecificationType::class, $specification);
+        $form->handleRequest($request);
+
+        $this->specificationService->save($specification);
+        $this->addFlash('success', 'Successfully added a specification to this product!');
+
+        return $this->redirectToRoute('admin_products_specifications_create', ['id' => $product->getId()]);
     }
 }

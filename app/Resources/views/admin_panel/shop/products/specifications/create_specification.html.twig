@@ -1,0 +1,143 @@
+{% extends 'admin_panel/base.html.twig' %}
+
+{% block body %}
+
+    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">General</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card card-solid">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="col-12">
+                                            <img src="{{ asset('uploads/' ~ product.image ) }}"
+                                                 class="product-image img-fluid w-50"
+                                                 alt="Product Image">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <h3 class="my-3">{{ product.title }}
+                                            {% if product.promotion %}
+                                                <span class="badge badge-danger">promo</span>
+                                            {% endif %}
+                                        </h3>
+                                        <p>{{ product.description }}</p>
+                                        <hr>
+
+                                        <div class="bg-gray py-2 px-3 mt-4">
+                                            <h2 class="mb-0">
+                                                {% if product.promotion %}
+                                                    <del>Price: {{ product.price|number_format(2) }} BGN</del> <br/>
+                                                    <span class="text-danger font-weight-bold"> Price: {{ product.finalPrice|number_format(2) }} BGN (-{{ product.promotion.percentage }}<span
+                                                                class="small">%</span>)</span>
+                                                {% else %}
+                                                    Price: {{ product.finalPrice|number_format(2) }} BGN
+                                                {% endif %}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Current specifications</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if product.specifications == null %}
+                            <h4 class="text-info">This product doesn't have any specifications yet.</h4>
+                        {% endif %}
+                        <table class="table">
+                            <thead>
+                            <td class="border-right text-bold">Name</td>
+                            <td class="text-bold">Value</td>
+                            </thead>
+                            <tbody>
+                            {% for specification in product.specifications %}
+                                <tr>
+                                    <td class="border-right">
+                                        {{ specification.name }}
+                                    </td>
+                                    <td>
+                                        {{ specification.value }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Current Promotion</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="promoForm" name="promoForm"
+                              action="{{ path('admin_products_specifications_create', {'id': product.id}) }}"
+                              method="post">
+                            <div class="form-group">
+                                <label>Specification name:</label>
+                                <input type="text" class="form-control" name="specification[name]">
+                                <label>Specification value:</label>
+                                <input type="text" class="form-control" name="specification[value]">
+                            </div>
+                            <input type="submit" name="specification[save]" class="form-control"
+                                   value="Add specification">
+                        </form>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+    <script>
+        document.promoForm.total.value = {{ product.finalPrice }} +" BGN";
+
+        function Calc(className) {
+            const percentage = document.getElementsByClassName(className)[0].value;
+            const productPrice = {{ product.price }};
+            document.promoForm.total.value = productPrice - (productPrice * (percentage / 100)) + " BGN";
+        }
+    </script>
+{% endblock %}
