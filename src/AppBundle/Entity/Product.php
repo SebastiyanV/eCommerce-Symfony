@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,14 +51,6 @@ class Product
 
     /**
      * @var string
-     * @ORM\Column(name="image", type="string", nullable=false)
-     *
-     *
-     */
-    private $image;
-
-    /**
-     * @var string
      */
     private $summary;
 
@@ -87,11 +80,18 @@ class Product
     private $specifications;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ProductImage", mappedBy="product")
+     */
+    private $images;
+
+    /**
      * Product constructor.
      */
     public function __construct()
     {
         $this->isPublic = 1;
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -176,6 +176,7 @@ class Product
         return $this->price;
     }
 
+
     /**
      * Get price
      *
@@ -243,26 +244,6 @@ class Product
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string $image
-     *
-     * @return Product
-     */
-    public function setImage($image)  //i string v skobite
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -361,6 +342,37 @@ class Product
     public function setSpecifications(Specification $specifications): void
     {
         $this->specifications = $specifications;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstImage()
+    {
+        $images = $this->getImages();
+        $data = [];
+        /** @var ProductImage $image */
+        foreach ($images as $image) {
+            $data[] = $image->getImageFileName();
+        }
+
+        return array_shift($data);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param string $images
+     */
+    public function setImages(string $images): void
+    {
+        $this->images = $images;
     }
 
 

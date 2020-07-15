@@ -7,7 +7,7 @@ namespace AppBundle\Service\Category;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Repository\CategoryRepository;
-use AppBundle\Service\Article\ProductServiceInterface;
+use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\User\UserServiceInterface;
 
 class CategoryService implements CategoryServiceInterface

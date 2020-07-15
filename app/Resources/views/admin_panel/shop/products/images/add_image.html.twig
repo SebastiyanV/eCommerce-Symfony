@@ -1,0 +1,74 @@
+{% extends 'admin_panel/base.html.twig' %}
+
+{% block body %}
+
+    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="d-flex flex-column thumbnails">
+                        <div id="f1" class="tb tb-active"><img class="thumbnail-img fit-image"
+                                                               src="https://i.imgur.com/wL1uRBk.jpg"></div>
+                        <div id="f2" class="tb"><img class="thumbnail-img fit-image"
+                                                     src="https://i.imgur.com/3NusNP2.jpg"></div>
+                        <div id="f3" class="tb"><img class="thumbnail-img fit-image"
+                                                     src="https://i.imgur.com/pXUPOVR.jpg"></div>
+                        <div id="f4" class="tb"><img class="thumbnail-img fit-image"
+                                                     src="https://i.imgur.com/xX5Qmsa.jpg"></div>
+                        {% for image in product.images %}
+                            <div id="f5{{ image.id }}" class="tb"><img class="thumbnail-img fit-image"
+                                                         src="{{ asset('uploads/' ~ image.name ) }}"></div>
+                        {% endfor %}
+                    </div>
+                    <fieldset id="f11" class="active">
+                        <div class="product-pic"><img class="pic0" src="https://i.imgur.com/wL1uRBk.jpg">
+                        </div>
+                    </fieldset>
+                    <fieldset id="f21" class="">
+                        <div class="product-pic"><img class="pic0" src="https://i.imgur.com/3NusNP2.jpg">
+                        </div>
+                    </fieldset>
+                    <fieldset id="f31" class="">
+                        <div class="product-pic"><img class="pic0" src="https://i.imgur.com/pXUPOVR.jpg">
+                        </div>
+                    </fieldset>
+                    <fieldset id="f41" class="">
+                        <div class="product-pic"><img class="pic0" src="https://i.imgur.com/xX5Qmsa.jpg">
+                        </div>
+                    </fieldset>
+                    {% for image in product.images %}
+                        <fieldset id="f5{{ image.id }}1" class="">
+                            <div class="product-pic"><img class="pic0" src="{{ asset('uploads/' ~ image.name) }}">
+                            </div>
+                        </fieldset>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add new image</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{ form_widget(form.imageFileName) }}
+                        </div>
+                        {{ form_widget(form.save) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

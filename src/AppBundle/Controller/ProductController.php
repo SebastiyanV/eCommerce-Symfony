@@ -4,9 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\ProductImage;
+use AppBundle\Form\ProductImageType;
 use AppBundle\Form\ProductType;
-use AppBundle\Service\Article\ProductServiceInterface;
+use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\Category\CategoryServiceInterface;
+use AppBundle\Service\ProductImage\ProductImageServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,14 +33,24 @@ class ProductController extends Controller
     private $categoryService;
 
     /**
+     * @var ProductImageServiceInterface $imageService
+     */
+    private $imageService;
+
+    /**
      * ProductController constructor.
      * @param ProductServiceInterface $productService
      * @param CategoryServiceInterface $categoryService
+     * @param ProductImageServiceInterface $imageService
      */
-    public function __construct(ProductServiceInterface $productService, CategoryServiceInterface $categoryService)
-    {
+    public function __construct(
+        ProductServiceInterface $productService,
+        CategoryServiceInterface $categoryService,
+        ProductImageServiceInterface $imageService
+    ) {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
+        $this->imageService = $imageService;
     }
 
     /**
@@ -152,30 +165,8 @@ class ProductController extends Controller
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $this->productService->save($product);
 
-            /** @var UploadedFile $file */
-            $file = $form->get('image')->getData();
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-            try {
-                $file->move(
-                    $this->getParameter('upload_directory'),
-                    $fileName
-                );
-
-                $product->setImage($fileName);
-
-            } catch (FileException $ex) {
-
-            }
-            $product->setImage($fileName);
-
-            $this->productService->save($product);
-
-
-            return $this->redirectToRoute('admin_products_view_by_category_id');
-        }
 
         return $this->redirectToRoute('admin_products_view_by_category_id');
     }
@@ -185,11 +176,118 @@ class ProductController extends Controller
      * @param int $id
      * @return Response
      */
-    public function adminViewProduct(int $id)
-    {
+    public
+    function adminViewProduct(
+        int $id
+    ) {
         $product = $this->productService->getOneById($id);
 
         return $this->render('admin_panel/shop/products/view_one.html.twig', ['product' => $product]);
     }
 
+    /**
+     * @Route("/admin/products/edit/{id}", name="admin_products_edit", methods={"GET"})
+     * @param int $id
+     * @return Response
+     */
+    public
+    function adminEditProduct(
+        int $id
+    ) {
+        $product = $this->productService->getOneById($id);
+
+        return $this->render(
+            'admin_panel/shop/products/edit_product.html.twig',
+            [
+                'form' => $this->createForm(ProductType::class)->createView(),
+                'product' => $product,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/admin/products/edit/{id}", methods={"POST"})
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public
+    function adminEditProductProcess(
+        int $id,
+        Request $request
+    ) {
+        $product = $this->productService->getOneById($id);
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        var_dump($product->getImage());
+        exit;
+
+        $this->productService->edit($product);
+        $this->addFlash('success', 'Product updated successfully!');
+
+        return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
+    }
+
+    /**
+     * @Route("/admin/products/{id}/images/add", name="admin_products_images_add", methods={"GET"})
+     * @param int $id
+     * @return Response
+     */
+    public
+    function addImage(
+        int $id
+    ) {
+        return $this->render(
+            'admin_panel/shop/products/images/add_image.html.twig',
+            [
+                'product' => $this->productService->getOneById($id),
+                'form' => $this->createForm(ProductImageType::class)->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/admin/products/{id}/images/add", methods={"POST"})
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public
+    function addImageProcess(
+        Request $request,
+        int $id
+    ) {
+        $image = new ProductImage();
+        $form = $this->createForm(ProductImageType::class, $image);
+        $form->handleRequest($request);
+        $image->setProduct($this->productService->getOneById($id));
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $file */
+            $file = $form->get('imageFileName')->getData();
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('upload_directory'),
+                    $fileName
+                );
+
+                $image->setName($fileName);
+
+            } catch (FileException $ex) {
+
+            }
+
+            $image->setName($fileName);
+
+            $this->imageService->add($image);
+
+            return $this->redirectToRoute('admin_products_view_by_category_id');
+        }
+
+        return $this->redirectToRoute('admin_products_view_by_category_id');
+    }
 }

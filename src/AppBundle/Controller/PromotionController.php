@@ -6,7 +6,7 @@ use AppBundle\Entity\Orders;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Promotion;
 use AppBundle\Form\PromotionType;
-use AppBundle\Service\Article\ProductServiceInterface;
+use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\Orders\OrdersService;
 use AppBundle\Service\Promotion\PromotionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

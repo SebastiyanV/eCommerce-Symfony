@@ -1,6 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        fieldset.active {
+            display: block !important
+        }
+
+        fieldset {
+            display: none
+        }
+
+        .pic0 {
+            width: 50%;
+            margin-left: 85px;
+            margin-right: auto;
+            display: block;
+        }
+
+        .product-pic {
+            padding-left: auto;
+            padding-right: auto;
+            width: 100%
+        }
+
+        .thumbnails {
+            margin-left: 20px;
+            margin-top: 20px;
+            position: absolute
+        }
+
+        .fit-image {
+            width: 100%;
+            object-fit: cover
+        }
+
+        .tb {
+            width: 62px;
+            height: 62px;
+            border: 1px solid grey;
+            margin: 2px;
+            opacity: 0.4;
+            cursor: pointer
+        }
+
+        .tb-active {
+            opacity: 1
+        }
+
+        .thumbnail-img {
+            width: 60px;
+            height: 60px
+        }
+
+        @media screen and (max-width: 768px) {
+            .pic0 {
+                width: 250px;
+                height: 350px
+            }
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 3 | Dashboard</title>
@@ -408,6 +466,36 @@
             "autoWidth": false,
             "responsive": true,
         });
+    });
+
+    $(document).ready(function () {
+
+        $(".tb").hover(function () {
+
+            $(".tb").removeClass("tb-active");
+            $(this).addClass("tb-active");
+
+            current_fs = $(".active");
+
+            next_fs = $(this).attr('id');
+            next_fs = "#" + next_fs + "1";
+
+            $("fieldset").removeClass("active");
+            $(next_fs).addClass("active");
+
+            current_fs.animate({}, {
+                step: function () {
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({
+                        'display': 'block'
+                    });
+                }
+            });
+        });
+
     });
 </script>
 <script>

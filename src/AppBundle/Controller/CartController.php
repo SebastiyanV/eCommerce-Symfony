@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Cart;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Product;
-use AppBundle\Service\Article\ProductServiceInterface;
+use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\Cart\CartServiceInterface;
 use AppBundle\Service\Orders\OrdersService;
 use AppBundle\Service\Orders\OrdersServiceInterface;

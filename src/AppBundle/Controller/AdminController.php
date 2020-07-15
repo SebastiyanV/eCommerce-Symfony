@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Category;
 use AppBundle\Form\ProductType;
-use AppBundle\Service\Article\ProductServiceInterface;
+use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\Category\CategoryServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;

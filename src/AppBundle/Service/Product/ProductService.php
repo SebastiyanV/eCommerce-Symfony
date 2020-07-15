@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppBundle\Service\Article;
+namespace AppBundle\Service\Product;
 
 
 use AppBundle\Entity\Product;

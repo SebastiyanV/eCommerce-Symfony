@@ -40,7 +40,7 @@ class ProductType extends AbstractType
                         return $c->getParent();
                     },
                 ]
-            )->add('image', FileType::class, ['label' => 'Upload image', 'data' => null])
+            )
             ->add('save', SubmitType::class);
     }
 
