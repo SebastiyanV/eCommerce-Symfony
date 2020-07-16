@@ -38,6 +38,7 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         categoryService: '@AppBundle\Service\Category\CategoryService'
+        productService: '@AppBundle\Service\Product\ProductService'
 
 # Doctrine Configuration
 doctrine:

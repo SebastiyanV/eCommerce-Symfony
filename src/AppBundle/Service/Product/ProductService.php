@@ -58,6 +58,7 @@ class ProductService implements ProductServiceInterface
     public function remove(int $id): bool
     {
         $article = $this->getOneById($id);
+
         return $this->articleRepository->delete($article);
     }
 
@@ -78,6 +79,9 @@ class ProductService implements ProductServiceInterface
         return $this->articleRepository->findBy(['category' => $id]);
     }
 
+    /**
+     * @return array|null
+     */
     public function getAllPublicProducts(): ?array
     {
         $products = $this->getAll();
@@ -85,12 +89,25 @@ class ProductService implements ProductServiceInterface
 
         /** @var Product $product */
         foreach ($products as $product) {
-            if($product->isIsPublic() === true) {
+            if ($product->isIsPublic() === true) {
                 $publicProducts[] = $product;
             }
         }
 
         return $publicProducts;
 
+    }
+
+    /**
+     * @return int
+     */
+    public function productCount(): int
+    {
+        $count = 0;
+        foreach ($this->getAll() as $item) {
+            $count++;
+        }
+
+        return $count;
     }
 }

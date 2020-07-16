@@ -21,4 +21,6 @@ interface ProductServiceInterface
     public function getAllByCategoryId(int $id): ?array;
 
     public function getAllPublicProducts(): ?array;
+
+    public function productCount(): int;
 }

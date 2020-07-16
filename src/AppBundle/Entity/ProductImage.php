@@ -35,6 +35,12 @@ class ProductImage
     private $product;
 
     /**
+     * @var bool
+     * @ORM\Column(name="top_image", type="boolean")
+     */
+    private $topImage;
+
+    /**
      * Get id
      *
      * @return int
@@ -71,7 +77,7 @@ class ProductImage
     /**
      * @return Product
      */
-    public function getProduct(): Product
+    public function getProduct()
     {
         return $this->product;
     }
@@ -99,5 +105,22 @@ class ProductImage
     {
         $this->imageFileName = $imageFileName;
     }
+
+    /**
+     * @return bool
+     */
+    public function isTopImage(): bool
+    {
+        return $this->topImage;
+    }
+
+    /**
+     * @param bool $topImage
+     */
+    public function setTopImage(bool $topImage): void
+    {
+        $this->topImage = $topImage;
+    }
+
 }
 

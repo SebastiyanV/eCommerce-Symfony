@@ -19,42 +19,24 @@
                                 <i class="fas fa-minus"></i></button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card card-solid">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="col-12">
-                                            <img src="{{ asset('uploads/' ~ product.image ) }}"
-                                                 class="product-image img-fluid w-50"
-                                                 alt="Product Image">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <h3 class="my-3">{{ product.title }}
-                                            {% if product.promotion %}
-                                                <span class="badge badge-danger">promo</span>
-                                            {% endif %}
-                                        </h3>
-                                        <p>{{ product.description }}</p>
-                                        <hr>
-
-                                        <div class="bg-gray py-2 px-3 mt-4">
-                                            <h2 class="mb-0">
-                                                {% if product.promotion %}
-                                                    <del>Price: {{ product.price|number_format(2) }} BGN</del> <br/>
-                                                    <span class="text-danger font-weight-bold"> Price: {{ product.finalPrice|number_format(2) }} BGN (-{{ product.promotion.percentage }}<span
-                                                                class="small">%</span>)</span>
-                                                {% else %}
-                                                    Price: {{ product.finalPrice|number_format(2) }} BGN
-                                                {% endif %}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div>
+                        <div class="d-flex flex-column thumbnails">
+                            {% set hasActiveThumbnail = false %}
+                            {% for image in product.images %}
+                                <div id="f5{{ image.id }}"
+                                     class="tb {% if hasActiveThumbnail == false %}tb-active {% set hasActiveThumbnail = true %} {% endif %}">
+                                    <img
+                                            class="thumbnail-img fit-image"
+                                            src="{{ asset('uploads/' ~ image.name ) }}"></div>
+                            {% endfor %}
                         </div>
+                        {% set hasActiveImage = false %}
+                        {% for image in product.images %}
+                            <fieldset id="f5{{ image.id }}1" class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
+                                <div class="product-pic"><img class="pic0" src="{{ asset('uploads/' ~ image.name) }}">
+                                </div>
+                            </fieldset>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -90,7 +72,6 @@
                             <div class="form-group">
                                 {{ form_widget(form.category, { 'value': product.category.id ~ "" }) }}
                             </div>
-                            <input type="hidden" value="{{ product.image }}" name="product[image]">
 
                             <input type="submit" name="save" class="form-control">
                             {#                            {{ form_widget(form.save, {'label': 'Edit product'}) }}#}

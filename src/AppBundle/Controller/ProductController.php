@@ -220,9 +220,6 @@ class ProductController extends Controller
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        var_dump($product->getImage());
-        exit;
-
         $this->productService->edit($product);
         $this->addFlash('success', 'Product updated successfully!');
 
@@ -285,9 +282,9 @@ class ProductController extends Controller
 
             $this->imageService->add($image);
 
-            return $this->redirectToRoute('admin_products_view_by_category_id');
+            return $this->redirectToRoute('admin_products_images_add', ['id' => $image->getProduct()->getId()]);
         }
 
-        return $this->redirectToRoute('admin_products_view_by_category_id');
+        return $this->redirectToRoute('admin_products_images_add', ['id' => $image->getProduct()->getId()]);
     }
 }

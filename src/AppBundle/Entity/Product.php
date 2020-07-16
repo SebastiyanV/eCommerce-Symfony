@@ -360,6 +360,23 @@ class Product
     }
 
     /**
+     * @return ProductImage|null
+     */
+    public function getTopImage()
+    {
+        $images = $this->getImages();
+
+        /** @var ProductImage $image */
+        foreach ($images as $image) {
+            if ($image->isTopImage()) {
+                return $image;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getImages()
@@ -374,7 +391,6 @@ class Product
     {
         $this->images = $images;
     }
-
 
 }
 

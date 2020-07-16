@@ -17,10 +17,13 @@
                                 <a class="nav-link" href="{{ path('homepage') }}">Home</a>
                             </li>
 
+                            {% if productService.productCount >= 1 %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('view_all_products') }}">Shop</a>
                             </li>
+                            {% endif %}
 
+                            {#                            //TODO: show only when articles are >= 1#}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('blog_index') }}">Blog</a>
                             </li>
@@ -28,6 +31,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('about_us') }}">About us</a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('contact_us') }}">Contact us</a>
                             </li>
@@ -36,7 +40,8 @@
                             <ul class="navbar-nav ml-auto mt-10">
                                 {% if app.user.admin %}
                                     <li class="nav-item">
-                                        <a class="nav-link login-button font-weight-bold" href="{{ path('admin_dashboard') }}">Admin
+                                        <a class="nav-link login-button font-weight-bold"
+                                           href="{{ path('admin_dashboard') }}">Admin
                                             Panel</a>
                                     </li>
                                 {% endif %}

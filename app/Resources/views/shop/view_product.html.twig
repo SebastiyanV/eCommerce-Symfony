@@ -8,28 +8,49 @@
                 <!-- Left sidebar -->
                 <div class="col-md-8">
                     <div class="product-details">
-                        <h1 class="product-title">{{ product.title }}</h1>
-                        <div class="product-meta">
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><i class="fa fa-folder-open-o"></i>
-                                    Category
-                                    {% if product.category.parent %}
-                                        <a href="{{ path('view_product', {'id': product.category.parent.id}) }}">
-                                            {{ product.category.parent }} /
-                                        </a>
-                                    {% endif %}
-                                    <a href="{{ path('view_product', {'id': product.category.id}) }}">
-                                        {{ product.category.name }}
-                                    </a>
 
-                                </li>
-                            </ul>
-                        </div>
 
                         <!-- product slider -->
-                        <div class="product-slider-item my-4" data-image="images/products/products-1.jpg">
-                            <img class="img  w-50" src="{{ asset('uploads/' ~ product.image ) }}"
-                                 alt="product-img">
+                        <div class="card">
+                            <h1 class="product-title ml-4 mt-4">{{ product.title }}</h1>
+                            <div class="product-meta ml-4">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><i class="fa fa-folder-open-o"></i>
+                                        Category
+                                        {% if product.category.parent %}
+                                            <a href="{{ path('view_product', {'id': product.category.parent.id}) }}">
+                                                {{ product.category.parent }} /
+                                            </a>
+                                        {% endif %}
+                                        <a href="{{ path('view_product', {'id': product.category.id}) }}">
+                                            {{ product.category.name }}
+                                        </a>
+
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <div class="d-flex flex-column thumbnails">
+                                    {% set hasActiveThumbnail = false %}
+                                    {% for image in product.images %}
+                                        <div id="f5{{ image.id }}"
+                                             class="tb {% if hasActiveThumbnail == false %}tb-active {% set hasActiveThumbnail = true %} {% endif %}">
+                                            <img
+                                                    class="thumbnail-img fit-image"
+                                                    src="{{ asset('uploads/' ~ image.name ) }}"></div>
+                                    {% endfor %}
+                                </div>
+                                {% set hasActiveImage = false %}
+                                {% for image in product.images %}
+                                    <fieldset id="f5{{ image.id }}1"
+                                              class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
+                                        <div class="product-pic"><img class="pic0"
+                                                                      src="{{ asset('uploads/' ~ image.name) }}">
+                                        </div>
+                                    </fieldset>
+                                {% endfor %}
+                            </div>
                         </div>
                         <!-- product slider -->
 
@@ -40,16 +61,14 @@
                                        role="tab" aria-controls="pills-home"
                                        aria-selected="true">Product Details</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
-                                       role="tab" aria-controls="pills-profile"
-                                       aria-selected="false">Specifications</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
-                                       role="tab" aria-controls="pills-contact"
-                                       aria-selected="false">Reviews</a>
-                                </li>
+                                {% if product.specifications %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill"
+                                           href="#pills-profile"
+                                           role="tab" aria-controls="pills-profile"
+                                           aria-selected="false">Specifications</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
@@ -75,74 +94,6 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-contact" role="tabpanel"
                                      aria-labelledby="pills-contact-tab">
-                                    <h3 class="tab-title">Product Review</h3>
-                                    <div class="product-review">
-                                        <div class="media">
-                                            <!-- Avater -->
-                                            <img src="images/user/user-thumb.jpg" alt="avater">
-                                            <div class="media-body">
-                                                <!-- Ratings -->
-                                                <div class="ratings">
-                                                    <ul class="list-inline">
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-star"></i>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-star"></i>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-star"></i>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-star"></i>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="name">
-                                                    <h5>Jessica Brown</h5>
-                                                </div>
-                                                <div class="date">
-                                                    <p>Mar 20, 2018</p>
-                                                </div>
-                                                <div class="review-comment">
-                                                    <p>
-                                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                                        accusantium doloremqe laudant tota rem ape
-                                                        riamipsa eaque.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="review-submission">
-                                            <h3 class="tab-title">Submit your review</h3>
-                                            <!-- Rate -->
-                                            <div class="rate">
-                                                <div class="starrr"></div>
-                                            </div>
-                                            <div class="review-submit">
-                                                <form action="#" class="row">
-                                                    <div class="col-lg-6">
-                                                        <input type="text" name="name" id="name" class="form-control"
-                                                               placeholder="Name">
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <input type="email" name="email" id="email" class="form-control"
-                                                               placeholder="Email">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <textarea name="review" id="review" rows="10"
-                                                                  class="form-control" placeholder="Message"></textarea>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <button type="submit" class="btn btn-main">Sumbit</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +104,8 @@
                         <div class="widget price text-center">
                             <h4>Price</h4>
                             <p>{{ product.price|number_format(2) }} BGN</p>
-                            <a href="#" class="font-weight-bold btn btn-secondary">Add to cart</a>
+                            <a href="{{ path('cart_add', {'id': product.id }) }}"
+                               class="font-weight-bold btn btn-secondary">Add to cart</a>
                         </div>
                         <!-- Rate Widget -->
                         <div class="widget rate">

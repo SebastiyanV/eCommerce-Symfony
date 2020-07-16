@@ -60,7 +60,7 @@
                                                 {% endif %}
                                                 <a href="{{ path('view_product', {'id': product.id }) }}">
                                                     <img class="card-img-top img-fluid"
-                                                         src="{{ asset('uploads/' ~ product.image) }}"
+                                                         src="{% if product.topImage %} {{ asset('uploads/' ~ product.topImage.name ) }} {% else %} {{ asset('images/no_image.png') }} {% endif %}"
                                                          alt="Card image cap">
                                                 </a>
                                             </div>
