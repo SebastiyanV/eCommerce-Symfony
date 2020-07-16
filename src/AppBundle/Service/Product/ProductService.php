@@ -110,4 +110,21 @@ class ProductService implements ProductServiceInterface
 
         return $count;
     }
+
+    /**
+     * @param Product $product
+     * @return bool
+     */
+    public function changePublic(Product $product): bool
+    {
+        if ($product->isIsPublic()) {
+            $product->setIsPublic(false);
+
+            return $this->edit($product);
+        } else {
+            $product->setIsPublic(true);
+
+            return $this->edit($product);
+        }
+    }
 }

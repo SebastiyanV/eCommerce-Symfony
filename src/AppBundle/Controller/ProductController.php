@@ -324,4 +324,16 @@ class ProductController extends Controller
 
         return $this->redirectToRoute('admin_products_images_add', ['id' => $productId]);
     }
+
+    /**
+     * @Route("/admin/products/{productId}/change-public", name="admin_products_change_public")
+     * @param int $productId
+     * @return RedirectResponse
+     */
+    public function changePublic(int $productId)
+    {
+        $this->productService->changePublic($this->productService->getOneById($productId));
+
+        return $this->redirectToRoute('admin_products_view_by_category_id');
+    }
 }

@@ -44,7 +44,7 @@
                     <div class="product-grid-list">
                         <div class="row mt-30">
 
-                            {% for product in products %}
+                            {% for product in products if product.isPublic == true%}
                                 <div class="col-sm-12 col-lg-4 col-md-6 border-danger">
                                     <!-- product card -->
                                     <div class="product-item bg-light border-danger">

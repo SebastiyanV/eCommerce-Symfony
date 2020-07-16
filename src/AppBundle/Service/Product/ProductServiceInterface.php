@@ -23,4 +23,6 @@ interface ProductServiceInterface
     public function getAllPublicProducts(): ?array;
 
     public function productCount(): int;
+
+    public function changePublic(Product $product): bool;
 }
