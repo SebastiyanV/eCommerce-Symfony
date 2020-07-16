@@ -5,11 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\ProductImage;
+use AppBundle\Entity\ProductViews;
 use AppBundle\Form\ProductImageType;
 use AppBundle\Form\ProductType;
 use AppBundle\Service\Product\ProductServiceInterface;
 use AppBundle\Service\Category\CategoryServiceInterface;
 use AppBundle\Service\ProductImage\ProductImageServiceInterface;
+use AppBundle\Service\ProductVIews\ProductViewsServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,19 +40,27 @@ class ProductController extends Controller
     private $imageService;
 
     /**
+     * @var ProductViewsServiceInterface $productViewService
+     */
+    private $productViewService;
+
+    /**
      * ProductController constructor.
      * @param ProductServiceInterface $productService
      * @param CategoryServiceInterface $categoryService
      * @param ProductImageServiceInterface $imageService
+     * @param ProductViewsServiceInterface $productViewService
      */
     public function __construct(
         ProductServiceInterface $productService,
         CategoryServiceInterface $categoryService,
-        ProductImageServiceInterface $imageService
+        ProductImageServiceInterface $imageService,
+        ProductViewsServiceInterface $productViewService
     ) {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
         $this->imageService = $imageService;
+        $this->productViewService = $productViewService;
     }
 
     /**
@@ -99,10 +109,40 @@ class ProductController extends Controller
     /**
      * @Route("/shop/product/{id}", name="view_product")
      * @param int $id
+     * @param Request $request
      * @return Response
      */
-    public function viewProduct(int $id)
+    public function viewProduct(int $id, Request $request)
     {
+        /** @var ProductViews $lastView */
+        $array = $this->productViewService->getLastViewByIpAndProduct($request->getClientIp(), $id);
+
+        if ($array == null) {
+            $productView = new ProductViews();
+            $productView->setProduct($this->productService->getOneById($id));
+            $productView->setIpAddress($request->getClientIp());
+            $this->productViewService->add($productView);
+
+            return $this->render(
+                'shop/view_product.html.twig',
+                [
+                    'product' => $this->productService->getOneById($id),
+                ]
+            );
+        }
+
+        $lastView = array_pop($array);
+        $lastView->getDate()->modify('+30 sec');
+
+        $requiredDate = new \DateTime();
+
+        if ($lastView->getDate() < $requiredDate) {
+            $productView = new ProductViews();
+            $productView->setProduct($this->productService->getOneById($id));
+            $productView->setIpAddress($request->getClientIp());
+            $this->productViewService->add($productView);
+        }
+
         return $this->render(
             'shop/view_product.html.twig',
             [

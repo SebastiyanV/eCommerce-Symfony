@@ -86,12 +86,19 @@ class Product
     private $images;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ProductViews", mappedBy="product")
+     * @var ArrayCollection
+     */
+    private $views;
+
+    /**
      * Product constructor.
      */
     public function __construct()
     {
         $this->isPublic = 1;
         $this->images = new ArrayCollection();
+        $this->views = new ArrayCollection();
     }
 
     /**
@@ -390,6 +397,22 @@ class Product
     public function setImages(string $images): void
     {
         $this->images = $images;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getViews(): ArrayCollection
+    {
+        return $this->views;
+    }
+
+    /**
+     * @param ArrayCollection $views
+     */
+    public function setViews(ArrayCollection $views): void
+    {
+        $this->views = $views;
     }
 
 }
