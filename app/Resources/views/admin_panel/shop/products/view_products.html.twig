@@ -21,7 +21,7 @@
                                 </svg>
                             </button>
                             {% if product.firstImage != null %}
-                                <img src="{{ asset('uploads/' ~ product.firstImage) }}" class="img-fluid w-50"
+                                <img src="{{ asset('uploads/' ~ product.topImage.name) }}" class="img-fluid w-50"
                                      alt="Product image">
                             {% else %}
                                 <img src="{{ asset('images/no_image.png') }}" class="img-fluid w-50"

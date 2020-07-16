@@ -22,7 +22,8 @@
                     </div>
                     {% set hasActiveImage = false %}
                     {% for image in product.images %}
-                        <fieldset id="f5{{ image.id }}1" class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
+                        <fieldset id="f5{{ image.id }}1"
+                                  class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
                             <div class="product-pic"><img class="pic0" src="{{ asset('uploads/' ~ image.name) }}">
                             </div>
                         </fieldset>
@@ -50,6 +51,56 @@
                         {{ form_end(form) }}
                     </div>
                 </div>
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Delete Images</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for image in product.images %}
+                                <div class="col">
+                                    <div class="border-right border-bottom border-secondary">
+                                        <img src="{{ asset('uploads/' ~ image.name) }}" width="100px">
+                                        <div>
+                                            <a href="{{ path('admin_products_images_delete', {'productId': image.product.id, 'imageId': image.id}) }}"
+                                               class="text-danger">
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                     class="bi bi-trash-fill"
+                                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                          d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                                </svg>
+                                                Delete
+                                            </a>
+                                        </div>
+                                        {% if image.topImage == false %}
+                                        <div>
+                                            <a href="{{ path('admin_products_images_set_main', {'productId': image.product.id, 'imageId': image.id}) }}"
+                                               class="text-warning">
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                     class="bi bi-star-fill"
+                                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                </svg>
+                                                Main image
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>

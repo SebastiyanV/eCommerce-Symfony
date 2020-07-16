@@ -32,7 +32,8 @@
                         </div>
                         {% set hasActiveImage = false %}
                         {% for image in product.images %}
-                            <fieldset id="f5{{ image.id }}1" class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
+                            <fieldset id="f5{{ image.id }}1"
+                                      class="{% if hasActiveImage == false %} active {% set hasActiveImage = true %} {% endif %}">
                                 <div class="product-pic"><img class="pic0" src="{{ asset('uploads/' ~ image.name) }}">
                                 </div>
                             </fieldset>

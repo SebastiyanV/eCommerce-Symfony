@@ -287,4 +287,41 @@ class ProductController extends Controller
 
         return $this->redirectToRoute('admin_products_images_add', ['id' => $image->getProduct()->getId()]);
     }
+
+    /**
+     * @Route("/admin/products/{productId}/images/{imageId}/set-main", name="admin_products_images_set_main")
+     * @param int $productId
+     * @param int $imageId
+     * @return RedirectResponse
+     */
+    public function setMainImage(int $productId, int $imageId)
+    {
+        $product = $this->productService->getOneById($productId);
+
+        /** @var ProductImage $image */
+        foreach ($product->getImages() as $image) {
+            if ($image->isTopImage()) {
+                $image->setTopImage(false);
+                $this->imageService->edit($image);
+            }
+        }
+        $currentImage = $this->imageService->getOneById($imageId);
+        $currentImage->setTopImage(true);
+        $this->imageService->edit($image);
+
+        return $this->redirectToRoute('admin_products_images_add', ['id' => $productId]);
+    }
+
+    /**
+     * @Route("/admin/products/{productId}/images/{imageId}/delete", name="admin_products_images_delete")
+     * @param int $productId
+     * @param int $imageId
+     * @return RedirectResponse
+     */
+    public function deleteImage(int $productId, int $imageId)
+    {
+        $this->imageService->delete($this->imageService->getOneById($imageId));
+
+        return $this->redirectToRoute('admin_products_images_add', ['id' => $productId]);
+    }
 }

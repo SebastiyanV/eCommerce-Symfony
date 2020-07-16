@@ -41,4 +41,35 @@ class ProductImageRepository extends \Doctrine\ORM\EntityRepository
         }
     }
 
+    /**
+     * @param ProductImage $image
+     * @return bool
+     */
+    public function update(ProductImage $image)
+    {
+        try {
+            $this->_em->merge($image);
+            $this->_em->flush();
+
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param ProductImage $image
+     * @return bool
+     */
+    public function delete(ProductImage $image)
+    {
+        try {
+            $this->_em->remove($image);
+            $this->_em->flush();
+
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
+    }
 }

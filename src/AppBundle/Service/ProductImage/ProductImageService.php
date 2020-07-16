@@ -29,6 +29,10 @@ class ProductImageService implements ProductImageServiceInterface
         $this->productService = $productService;
     }
 
+    /**
+     * @param ProductImage $productImage
+     * @return bool
+     */
     public function add(ProductImage $productImage): bool
     {
         $product = $productImage->getProduct();
@@ -49,6 +53,33 @@ class ProductImageService implements ProductImageServiceInterface
         }
 
         return $this->productImageRepository->insert($productImage);
+    }
+
+    /**
+     * @param ProductImage $image
+     * @return bool
+     */
+    public function edit(ProductImage $image): bool
+    {
+        return $this->productImageRepository->update($image);
+    }
+
+    /**
+     * @param ProductImage $image
+     * @return bool
+     */
+    public function delete(ProductImage $image): bool
+    {
+        return $this->productImageRepository->delete($image);
+    }
+
+    /**
+     * @param int $id
+     * @return ProductImage|null
+     */
+    public function getOneById(int $id): ?ProductImage
+    {
+        return $this->productImageRepository->findOneBy(['id' => $id]);
     }
 
 }
